@@ -1,0 +1,120 @@
+# FreshRoute WhatsApp Bot — Setup Guide
+# Total time: ~20 minutes
+# Total cost: $0
+
+============================================================
+STEP 1 — Install dependencies (30 seconds)
+============================================================
+
+Open your terminal in the freshroute folder and run:
+
+    pip install flask twilio openai
+
+============================================================
+STEP 2 — Add your OpenAI key (1 minute)
+============================================================
+
+Open chatbot.py and replace:
+
+    OPENAI_API_KEY = "PASTE_YOUR_OPENAI_KEY_HERE"
+
+With your actual OpenAI API key. Save the file.
+
+============================================================
+STEP 3 — Set up Twilio WhatsApp Sandbox (10 minutes)
+============================================================
+
+1. Go to https://www.twilio.com/try-twilio
+   Sign up — no credit card needed for the sandbox
+
+2. Once logged in, go to:
+   Messaging → Try it out → Send a WhatsApp message
+
+3. You'll see a sandbox number (like +1 415 523 8886)
+   and a join code (like "join bright-tiger")
+
+4. On YOUR phone, WhatsApp this number with the join code
+   e.g. text "join bright-tiger" to +1 415 523 8886
+   → You'll get a confirmation message
+
+5. For the PITCH DEMO: have the judge do the same thing
+   (text the join code once) — then they can use it live
+
+============================================================
+STEP 4 — Install ngrok (5 minutes)
+============================================================
+
+ngrok creates a public URL for your laptop.
+
+1. Go to https://ngrok.com → Sign up free
+2. Download ngrok for Windows
+3. Unzip it to your Downloads folder (or anywhere)
+4. Run this in terminal:
+
+    ngrok http 5000
+
+5. You'll see a line like:
+   Forwarding  https://abc123.ngrok.io -> localhost:5000
+
+   COPY that https URL — you need it for Step 5
+
+============================================================
+STEP 5 — Connect Twilio to your laptop (2 minutes)
+============================================================
+
+1. Go back to Twilio → Messaging → Try it out → WhatsApp sandbox
+2. Find the field: "When a message comes in"
+3. Paste your ngrok URL + /whatsapp like:
+   https://abc123.ngrok.io/whatsapp
+4. Set the method to HTTP POST
+5. Click Save
+
+============================================================
+STEP 6 — Start the bot
+============================================================
+
+In your terminal (freshroute folder):
+
+    python chatbot.py
+
+You should see:
+    🌿 FreshRoute WhatsApp Bot starting...
+    📡 Webhook ready at: http://localhost:5000/whatsapp
+    ⏳ Waiting for messages...
+
+============================================================
+TEST IT
+============================================================
+
+Text the Twilio number from your phone:
+    "I have 200kg of tomatoes in Nakuru"
+
+You should get a full spoilage analysis back in ~10 seconds.
+
+============================================================
+FOR THE PITCH DEMO
+============================================================
+
+On pitch day:
+1. Start ngrok FIRST: ngrok http 5000
+2. Update the Twilio webhook URL with the new ngrok URL
+   (ngrok gives a new URL each time you restart)
+3. Start the bot: python chatbot.py
+4. Have the judge text the number
+
+Pro tip: Keep ngrok and chatbot.py running on your laptop
+the whole time you're presenting. Don't close the terminal.
+
+Sample messages that produce great demo responses:
+- "200kg tomatoes, Nakuru, harvested 3 days ago"
+- "I have 500kg of mangoes near Kampala"
+- "Nina mahindi 1000kg Nairobi" (Swahili — it responds in Swahili)
+
+============================================================
+TROUBLESHOOTING
+============================================================
+
+"No module named flask" → run: pip install flask twilio openai
+Bot not responding → check ngrok is running + URL is in Twilio
+OpenAI error → check your API key in chatbot.py
+Twilio not sending → make sure you sent the join code from your phone first
